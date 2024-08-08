@@ -1,19 +1,18 @@
 ﻿using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-[ApiController]
-//this means our route will be api/users, [controller] gets replaced with part of class before Controller
-[Route("api/[controller]")]
-public class UsersController(DataContext context) : ControllerBase
+public class UsersController(DataContext context) : BaseApiController
 {
     //create api endpoints, we want these asynchronous code so that way multiple requests can happen at once
 
-    //get all users
+    [AllowAnonymous]
     [HttpGet]
+    //get all users
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
         //get list of users from our db
@@ -23,6 +22,7 @@ public class UsersController(DataContext context) : ControllerBase
 
     }
 
+    [Authorize]
     //get a single user, using the id. so this would be /api/users/whatever id is
     //{} makes it dynamic so it has the /api/users before the /id otherwise it would just be /id
     [HttpGet("{id:int}")]

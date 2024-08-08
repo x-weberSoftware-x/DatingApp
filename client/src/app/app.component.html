@@ -1,0 +1,9 @@
+<h1>{{title}}</h1>
+
+<ul>
+    <!--this is basically a foreach loop in angular-->
+    @for (user of users; track user.id) {
+        <!-- show the username and id for each user, we grabbed these users in the app.component.ts file -->
+        <li>{{user.id}} - {{user.userName}}</li>
+    }   
+</ul>

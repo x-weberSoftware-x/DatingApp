@@ -6,6 +6,11 @@ public class AppUser
     //if we wanted a different primary key we could put the attribute [Key] over the variable we want to use
     //also since Id is an int this tells entity framework to auto increment it in the db
     public int Id { get; set; }
+    
     //required means we cannot create an AppUser without a username, will not take a empty string either
     public required string UserName { get; set; }
+
+    //password auth variables, we are going to hash and salt, this is basic auth
+    public required byte[] PasswordHash { get; set; }
+    public required byte[] PasswordSalt { get; set; }
 }
