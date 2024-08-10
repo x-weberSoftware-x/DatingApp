@@ -1,30 +1,35 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavComponent } from "./nav/nav.component";
+import { AccountService } from './_services/account.service';
+import { HomeComponent } from "./home/home.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavComponent, HomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  //adding this means we can make http requests inside this component
-  http = inject(HttpClient);
-  title = 'DatingApp';
-  users: any;
+  private accountService = inject(AccountService);
 
-  //specify which url for the get requests, this returns a observable of the response body as a json object
-  //subscribe to the observable, since this is an http request it will auto unsubscribe when completed
+  
   ngOnInit(): void {
-    this.http.get('https://localhost:5001/api/users').subscribe({
-      //what to do next, in this case set users equal to the response from api/users
-      next: (response) => { this.users = response},
-      //what to do if there is an error
-      error: (error) => { console.log(error) },
-      //what to do when it completes
-      complete: () => { console.log('Request has completed')}
-    });
+    this.setCurrentUser();
+
   }
+
+  setCurrentUser(){
+    //get our user from the browser local storage
+    const userString = localStorage.getItem('user');
+    //if we dont have a user string then return out of this function
+    if (!userString) return;
+    //parse userstring in to a json object
+    const user = JSON.parse(userString);
+    //set our signal to the user
+    this.accountService.currentUser.set(user);
+  }
+
+ 
 }
