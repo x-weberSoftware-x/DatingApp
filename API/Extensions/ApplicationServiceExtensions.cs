@@ -21,6 +21,10 @@ public static class ApplicationServiceExtensions
         //user our ItokenService interface and the implemantation class TokenService
         //we are using an interface for abstraction and decoupling
         services.AddScoped<ITokenService, TokenService>();
+        //implement our created repository
+        services.AddScoped<IUserRepository, UserRepository>();
+        //this will look in our current assemblies and set up all our profiles we made
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         return services;
     }

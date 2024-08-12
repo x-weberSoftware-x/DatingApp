@@ -22,28 +22,29 @@ public class AccountController(DataContext context, ITokenService tokenService) 
 
         //this will use a hashing algorithm to encrypt text
         //using means we are using this in this function, once we are done using it it will be disposed of by the garbage collector
-        using var hmac = new HMACSHA512();
+        // using var hmac = new HMACSHA512();
 
-        var user = new AppUser 
-        {
-            UserName = registerDTO.Username.ToLower(),
-            //encode password into bytes
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-            //salt password
-            PasswordSalt = hmac.Key
-        };
+        // var user = new AppUser 
+        // {
+        //     UserName = registerDTO.Username.ToLower(),
+        //     //encode password into bytes
+        //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
+        //     //salt password
+        //     PasswordSalt = hmac.Key
+        // };
 
-        //add user to db
-        context.Users.Add(user);
-        //save the changes and await the save since this is a async method
-        await context.SaveChangesAsync();
+        // //add user to db
+        // context.Users.Add(user);
+        // //save the changes and await the save since this is a async method
+        // await context.SaveChangesAsync();
 
-        //return userDTO because we only want to return the user and the token not the passwordhashes or id's from the user
-        return new UserDTO
-        {
-            username = registerDTO.Username,
-            token = tokenService.CreateToken(user)
-        };
+        // //return userDTO because we only want to return the user and the token not the passwordhashes or id's from the user
+        // return new UserDTO
+        // {
+        //     username = registerDTO.Username,
+        //     token = tokenService.CreateToken(user)
+        // };
+        return Ok();
     }
 
     [HttpPost("login")] //api/account/login
