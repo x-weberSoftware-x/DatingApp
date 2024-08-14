@@ -1,1 +1,61 @@
-<p>member-detail works!</p>
+<!-- make sure we have a member so that way we dont need to use the optional (?) on every member call -->
+@if (member) {
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <!-- the || says if there is no member.photoUrl then show the assets/user.png default img -->
+                <img class="card-img img-thumbnail" src="{{member.photoUrl || '/assets/user.png'}}" alt="{{member.knownAs}}">
+                <div class="card-body">
+                    <div>
+                        <strong>Location:</strong>
+                        <p>{{member.city}}, {{member.country}}</p>
+                    </div>
+                    <div>
+                        <strong>Age:</strong>
+                        <p>{{member.age}}</p>
+                    </div>
+                    <div>
+                        <strong>Last Active:</strong>
+                        <p>{{member.lastActive}}</p>
+                    </div>
+                    <div>
+                        <strong>Member Since:</strong>
+                        <p>{{member.created}}</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group d-flex">
+                        <button class="btn btn-primary">Like</button>
+                        <button class="btn btn-success">Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <tabset class="member-tabset">
+                <tab heading="About {{member.knownAs}}">
+                    <h4>Description</h4>
+                    <p>{{member.introduction}}</p>
+                    <h4>Looking For</h4>
+                    <p>{{member.lookingFor}}</p>
+                </tab>
+                <tab heading="Interests">
+                    <h4>Interests</h4>
+                    <p>{{member.interests}}</p>
+                </tab>
+                <!-- give this a custom template #photoTab  -->
+                <tab heading="Photos" #photoTab="tab">
+                    <!-- check if that custom template is active so we can make sure the tab is already loaded before we try to use the gallery -->
+                    @if (photoTab.active) {
+                        <gallery [items]="images" class="gallery"></gallery>
+                    }
+                </tab>
+                <tab heading="Messages">
+                    <p>Messages will go here</p>
+                </tab>
+            </tabset>
+        </div>
+
+    </div>
+}
