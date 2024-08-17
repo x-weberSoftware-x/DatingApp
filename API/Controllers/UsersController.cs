@@ -1,4 +1,5 @@
-﻿using API.DTOs;
+﻿using System.Security.Claims;
+using API.DTOs;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -34,4 +35,24 @@ public class UsersController(IUserRepository userRepository, IMapper mapper) : B
 
         return user;
     }
+
+    //update
+    [HttpPut]
+    public async Task<ActionResult> UpdateUser(MemberUpdateDTO memberUpdateDTO)
+    {
+        //because the user has to be authorized here we can get the user name from the claimtypes
+        //in out tokenservice we specified our name identifier to be our username
+        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if(username == null) return BadRequest("No username found in token");
+
+        var user = await userRepository.GetUserByUsernameAsync(username);
+        if (user == null) return BadRequest("Could not find user");
+
+        //map the member dto to our user we now have
+        mapper.Map(memberUpdateDTO, user);
+        //if this save succeeded then just return no content since this is update function so we dont return anything
+        if( await userRepository.SaveAllAsync()) return NoContent();
+
+        return BadRequest("Failed to update the user");
+    } 
 }
